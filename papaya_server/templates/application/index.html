@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}My Applications{% endblock %}</h1>
+{% endblock %}
+
+{% from "macros.html" import status_convert with context %}
+
+
+{% block content %}
+    <article class="application">
+      <header>
+        <div style="background-color:lightblue">
+          <table>
+            <tr>
+              <th>Application</th>
+              <th>Creation Date</th>
+              <th>IAM</th>
+<!--              only when application is activce-->
+                <th>Server URL</th>
+                <th>Agent Config File</th>
+              <th>Status</th>
+            </tr>
+            {% for application in applications %}
+            <tr>
+              <td class="name"><h1>{{ application['name'] }}</h1></td>
+              <td class="creation date"> {{ application['creation_date'].strftime('%Y-%m-%d') }} </td>
+              {% if application['iam'] == 1 %}
+                  <td class="IAM" style='font-size:25px;'>&#x2714;</td>
+               {% else %}
+                  <td class="IAM" style='font-size:25px;'>&#x2717;</td>
+               {% endif %}
+<!--              {% if application['server_cfg_filename'] != None %}-->
+<!--                <td><a class="action" href="{{ url_for('application.download_cfg', cfg_filename = application['server_cfg_filename'], id = application['id']) }}"><h1>{{ application['server_cfg_filename'] }}</h1></a></td>-->
+<!--              {% else %}-->
+<!--                <td class="server_cfg_file">  </td>-->
+<!--              {% endif %}-->
+
+
+              {% if application['status'] == 1 %}
+                <td class="server url"> {{application['server_url']}}</td>
+                <td><a class="action" href="{{ url_for('application.download_cfg', cfg_filename = application['agent_cfg_filename'], id=application['id']) }}"> {{ application['agent_cfg_filename'] }}</a></td>
+              {% else %}
+                <td class="server url">  </td>
+                <td class="agent cfg filename ">  </td>
+              {% endif %}
+              {{  status_convert(application['status']) }}
+<!--              <td class="status"> {{ application['status'] }} </td>-->
+              {% if g.user['id'] == application['user_id'] %}
+<!--              <td><a class="action" href="{{ url_for('service.index', id=application['service_id']) }}">Edit</a></td>-->
+
+              <td>
+
+                {% if application['status'] != 1 %}
+                  <form action="{{ url_for('application.activate', id=application['id'])}}" method="post">
+                      <input type="submit" value="Activate" >
+                  </form>
+                {% elif application['status'] == 1 %}
+                  <form action="{{ url_for('k8s_logging.index', id=application['id'], page=0)}}" method="get">
+                      <input type="submit" value="View logs">
+                  </form>
+                  <form action="{{ url_for('application.terminate', id=application['id']) }}" method="post">
+                      <input class="danger" type="submit" value="Terminate" onclick="return confirm('Are you sure?');">
+                  </form>
+                {% endif %}
+                <form action="{{ url_for('application.delete', id=application['id']) }}" method="post">
+                    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+                </form>
+              </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+
+      </header>
+    </article>
+{% endblock %}

@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.bluemix.net/redirect-to-https: "true"
+  name: platform-dashboard
+  namespace: papaya
+spec:
+  rules:
+  -<Ingress Subdomain>
+    http:
+      paths:
+      - backend:
+          serviceName: platform-dashboard
+          servicePort: 5000
+        path: /
+  tls:
+  - hosts:
+    - <Ingress Subdomain>
+    secretName: <Ingress Secret>

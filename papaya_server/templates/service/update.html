@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Edit "{{service['name'] }}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="name">Name</label>
+    <input name="name" id="name"
+      value="{{ request.form['name'] or service['name'] }}" required>
+
+    <label for="server_container">Server Side Container</label>
+    <input name="server_container" id="server_container"
+      value="{{ request.form['server_container'] or service['server_container'] }}" required>
+
+    <label for="server_http_port">Server Side Container HTTP Port</label>
+    <input name="server_http_port" id="server_http_port"
+      value="{{ request.form['server_http_port'] or service['server_http_port'] }}">
+
+    <label for="server_tcp_port">Server Side Container TCP Port</label>
+    <input name="server_tcp_port" id="server_tcp_port"
+      value="{{ request.form['server_tcp_port'] or service['server_tcp_port'] }}">
+
+    <label for="agent_container">Agent Side Container</label>
+    <input name="agent_container" id="agent_container"
+      value="{{ request.form['agent_container'] or service['agent_container'] }}" required>
+
+    <label for="agent_http_port">Agent Side Container HTTP Port</label>
+    <input name="agent_http_port" id="agent_http_port"
+      value="{{ request.form['agent_http_port'] or service['agent_http_port'] }}">
+
+    <label for="agent_tcp_port">Agent Side Container HTTP Port</label>
+    <input name="agent_tcp_port" id="agent_tcp_port"
+      value="{{ request.form['agent_tcp_port'] or service['agent_tcp_port'] }}">
+
+    <label for="description">Description</label>
+    <textarea name="description" id="description">{{ request.form['description'] or service['description'] }}</textarea>
+
+<!--    <label for="status">Status</label>-->
+<!--    <input name="status" id="status"-->
+<!--      value="{{ request.form['status'] or service['status'] }}" required>-->
+
+    <input type="submit" value="Save">
+
+  </form>
+  <hr>
+  <form action="{{ url_for('service.delete', id=service['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
+{% endblock %}

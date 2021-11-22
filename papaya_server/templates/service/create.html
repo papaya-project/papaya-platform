@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Service{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post" enctype = "multipart/form-data">
+    <label for="name">Name</label>
+    <input name="name" id="name" value="{{ request.form['name'] }}" required>
+    <label for="server_container">Server Side Container</label>
+    <input name="server_container" id="server_container" value="{{ request.form['server_container'] }}" required>
+    <label for="server_http_port">Server Side Container HTTP Port</label>
+    <input name="server_http_port" id="server_http_port" value="{{ request.form['server_http_port'] }}">
+    <label for="server_tcp_port">Server Side Container TCP Port</label>
+    <input name="server_tcp_port" id="server_tcp_port" value="{{ request.form['server_tcp_port'] }}">
+    <label for="agent_container">Agent Side Container</label>
+    <input name="agent_container" id="agent_container" value="{{ request.form['agent_container'] }}" required>
+    <label for="agent_http_port">Agent Side Container HTTP Port</label>
+    <input name="agent_http_port" id="agent_http_port" value="{{ request.form['agent_http_port'] }}">
+    <label for="agent_tcp_port">Agent Side Container TCP Port</label>
+    <input name="agent_tcp_port" id="agent_tcp_port" value="{{ request.form['agent_tcp_port'] }}">
+    <label for="description">Service Description</label>
+    <textarea name="description" id="description">{{ request.form['description'] }}</textarea>
+<!--    <input type = "file", name = "file">-->
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}

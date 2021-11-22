@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Select Service "{{service['name']}}"{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+{% if g.user %}
+  <form method="post" enctype = "multipart/form-data">
+    <label for="name">Name</label>
+    <input name="name" id="name" value="{{ request.form['name'] }}" required>
+    <label for="name">Include IAM</label>
+    <input align="left" type="checkbox" name="iam" id="iam" value=1><br>
+<!--    <label for="name">Server Config File</label>-->
+<!--    <input type = "file", name = "file">-->
+    <input type="submit" value="Submit">
+  </form>
+{% endif %}
+{% endblock %}

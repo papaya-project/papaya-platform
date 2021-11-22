@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% from "macros.html" import status_convert with context %}
+
+{% block content %}
+
+      <body id="main">
+        <div class="row">
+          <h2 align="left">Logs:</h2>
+          <div class="logging_window">
+            {% for l in logs %}
+              <h3>{{l}}</h3>
+            {% endfor %}
+          </div>
+        </div>
+      </body>
+    {% if allow_prev %}
+        <a href={{url_for('k8s_logging.index', id=id, page=page+1)}}>Prev</a>
+    {% else %}
+        <a class="disabled" href={{url_for('k8s_logging.index', id=id, page=page+1)}}>Prev</a>
+    {% endif %}
+
+    {% if page != 0 %}
+        <a href={{url_for('k8s_logging.index', id=id, page=page-1)}}>Next</a>
+    {% else %}
+        <a  class="disabled" shref={{url_for('k8s_logging.index', id=id, page=page-1)}}>Next</a>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Services Catalog{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('service.create') }}">New</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+    <article class="service">
+      <header>
+        <div style="background-color:lightblue">
+          <table>
+          <tr>
+              <th>Service</th>
+              <th>Server Side Container</th>
+              <th>Server Side Container HTTP Port</th>
+              <th>Server Side Container TCP Port</th>
+              <th>Agent Side Container</th>
+              <th>Agent Side Container HTTP Port</th>
+              <th>Agent Side Container TCP Port</th>
+              <th>Creation Date</th>
+              <th>Description</th>
+              <th>Status</th>
+          </tr>
+          {% for service in services %}
+
+            <tr>
+              <td class="name"><h1>{{ service['name'] }}</h1></td>
+              <td class="server side container"> {{ service['server_container'] }} </td>
+              <td class="server side container http port"> {{ service['server_http_port'] }} </td>
+              <td class="server side container tcp port"> {{ service['server_tcp_port'] }} </td>
+              <td class="agent side container"> {{ service['agent_container'] }} </td>
+              <td class="agent side container http port"> {{ service['agent_http_port'] }} </td>
+              <td class="agent side container tcp port"> {{ service['agent_tcp_port'] }} </td>
+              <td class="creation date"> {{ service['creation_date'].strftime('%Y-%m-%d') }} </td>
+              <td class="description"> {{ service['description'] }} </td>
+              <td><a class="action" href="{{ url_for('application.create', id=service['id']) }}">Select</a></td>
+              {% if g.user['id'] == service['author_id'] %}
+                <td><a class="action" href="{{ url_for('service.update', id=service['id']) }}">Edit</a></td>
+              {% endif %}
+            </tr>
+        {% endfor %}
+
+          </table>
+        </div>
+
+      </header>
+    </article>
+{% endblock %}
+

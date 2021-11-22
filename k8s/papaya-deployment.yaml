@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: platform-dashboard
+  name: platform-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: platform-dashboard
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        app: platform-dashboard
+    spec:
+      containers:
+      - name: platform-dashboard
+        env:
+        - name: LC_ALL
+          value: C.UTF-8
+        - name: FLASK_APP
+          value: papaya_server
+        - name: LANG
+          value: C.UTF-8
+        - name: ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: platform-admin
+              key: username
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: platform-admin
+              key: password
+        image: <Path to Docker Image - located in Container Registry>
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /papaya_server/instance/
+          name: platform-dashboard-vm
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+      serviceAccountName: papaya-sa
+      volumes:
+      - name: platform-dashboard-vm
+        persistentVolumeClaim:
+          claimName: platform-dashboard-pvc

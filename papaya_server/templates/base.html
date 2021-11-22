@@ -1,0 +1,37 @@
+<!doctype html>
+{% from "macros.html" import nav_link with context %}
+
+
+<title>{% block title %}{% endblock %} - PAPAYA</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<img src="{{ url_for('static', filename='logo.jpg') }}" height="100" width="120" >
+<h1>PAPAYA</h1>
+
+<nav>
+  <ul>
+
+    {% if g.user %}
+      <li><span>Hello {{ g.user['username'] }},</span>
+      {{ nav_link('service.index', 'Services Catalog') }}
+      {{ nav_link('application.index', 'My Applications') }}
+      {% if g.user['admin'] %}
+          <li><a href="{{ url_for('k8s_logging.admin_view') }}">Logs</a>
+          <li><a href="{{ url_for('auth.register') }}">Register</a>
+      {% endif %}
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+
+    {% else %}
+      {{ nav_link('service.index', 'Services Catalog') }}
+      <li><a href="{{ url_for('auth.login') }}">Log In</a>
+    {% endif %}
+  </ul>
+</nav>
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
+  {% block content %}{% endblock %}
+</section>

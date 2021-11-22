@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% macro nav_link(endpoint, name) %}
+{% if request.endpoint.endswith(endpoint) %}
+  <li class="active"><a href="{{ url_for(endpoint) }}">{{name}}</a></li>
+{% else %}
+  <li><a href="{{ url_for(endpoint) }}">{{name}}</a></li>
+{% endif %}
+{% endmacro %}
+
+{% macro status_convert(status) %}
+{% if status == 0 %}
+<td class="status"> <em>CREATED</em></td>
+{% elif status == 1  %}
+    <td class="status"><em>RUNNING</em></td>
+{% elif status == 2 %}
+    <td class="status"><em>TERMINATED</em></td>
+{% endif %}
+{% endmacro %}
